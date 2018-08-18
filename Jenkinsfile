@@ -1,10 +1,10 @@
 pipeline {
-    agent any
+    agent any 
     stages {
         stage('Deploy') {
             steps {
-                retry(3) {
-                    sh './scripts/fail-by-design.sh'
+                timeout(time:1, unit:"MINUTES") {
+                    sh './scripts/holding-by-design.sh'
                 }
             }
         }
