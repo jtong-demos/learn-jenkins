@@ -1,14 +1,21 @@
 pipeline {
     agent any
-    environment {
-        DISABLE_AUTH = 'true'
-        DB_ENGINE = 'sqlite'
-    }
     stages {
         stage('Build') {
-            steps{
-                sh 'printenv'
+            steps {
+                sh 'cd projects/java-gradle && ./gradlew clean build'
+            }  
+        }
+        stage('Test') {
+            steps {
+                sh 'cd projects/java-gradle && ./gradlew test'
             }
+        }
+    }
+    post {
+        always {
+            archiveArtifacts artifacts: 'projects/java-gradle/build/libs/**/*.jar', fingerprint: true
+            junit 'projects/java-gradle/build/test-results/**/*.xml'
         }
     }
 }
