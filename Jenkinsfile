@@ -1,21 +1,17 @@
 pipeline {
     agent any
     stages {
-        stage('Build') {
-            steps {
-                sh 'cd projects/java-gradle && ./gradlew clean build'
-            }  
-        }
-        stage('Test') {
-            steps {
-                sh 'cd projects/java-gradle && ./gradlew test'
+        stage("Build"){
+            steps{
+                sh 'exit 1'
             }
         }
     }
     post {
-        always {
-            archiveArtifacts artifacts: 'projects/java-gradle/build/libs/**/*.jar', fingerprint: true
-            junit 'projects/java-gradle/build/test-results/**/*.xml'
+        failure {
+            mail to: "test@example.com",
+                 subject: "xxxx ${currentBuild.fullDisplayName}",
+                 body: "xxxx ${env.BUILD_URL}"
         }
     }
 }
